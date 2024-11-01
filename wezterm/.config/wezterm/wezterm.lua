@@ -115,6 +115,7 @@ config.use_fancy_tab_bar = false
 
 config.front_end = "OpenGL"
 -- config.front_end = "WebGpu"
+config.enable_wayland = false
 config.max_fps = 144
 config.default_cursor_style = "BlinkingBlock"
 config.animation_fps = 1
