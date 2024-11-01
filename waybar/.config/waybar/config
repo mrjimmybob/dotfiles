@@ -1,0 +1,199 @@
+// MAIN WAYBAR CONFIG
+{
+    "layer": "top", // Waybar at top layer
+    "position": "top", // Waybar position (top|bottom|left|right)
+    "height": 35, // Waybar height (to be removed for auto height)
+    // "width": 3840, // 1280, // Waybar width
+    "spacing": 2, // Gaps between modules (pixels)
+    "padding": 2,
+    "margin-top": 2,
+    "margin-bottom":2,
+
+    // Choose the order of the modules
+    "modules-left":   ["custom/launcher", "hyprland/workspaces", "hyprland/window"],
+    "modules-center": ["clock"],
+    "modules-right":  ["wlr/taskbar",
+                       "tray",
+		       "cpu",
+		       "memory",
+		       "temperature",
+                       "disk",
+		       "pulseaudio",
+		       "network",
+		       "custom/power"],
+
+    // Modules configuration
+    //   ϰ 𝓔     
+    // ⓪ ① ② ③ ④ ⑤ ⑥ ⑦ ⑧ ⑨ ⑩
+    // 🄋 ➀ ➁ ➂ ➃ ➄ ➅ ➆ ➇ ➈ ➉
+    // 🄌 ➊ ➋ ➌ ➍ ➎ ➏ ➐ ➑ ➒ ➓ 
+    // 󰎡 󰎤 󰎧 󰎪 󰎭 󰎱 󰎳 󰎶 󰎹 󰎼 󰽽 󰀧
+    // 󰎣 󰎦 󰎩 󰎬 󰎮 󰎰 󰎵 󰎸 󰎻 󰎾 󰽾 󰳤
+    //      "
+    "hyprland/workspaces": {
+        "on-click": "activate",
+        "disable-scroll": false,
+	"on-scroll-up": "hyprctl dispatch workspace e+1",
+	"on-scroll-down": "hyprctl dispatch workspace e-1",
+        "format": "{icon}",
+        "format-icons": {
+            "1": "󰎤",
+            "2": "󰎧",
+            "3": "󰎪",
+            "4": "󰎭",
+            "5": "󰎱",
+            "6": "󰎳",
+            "7": "󰎶",
+            "8": "󰎹",
+            "9": "󰎼",
+            "10": "󰽽",
+            "urgent": "󰀧",
+            "active": "󰧖",
+            "default": "󱗜"
+         },
+         "persistent-workspaces": {
+            "1": "[]",
+            "2": "[]",
+            "3": "[]",
+            "4": "[]",
+            "5": "[]",
+            "6": "[]",
+            "7": "[]",
+            "8": "[]",
+            "9": "[]",
+            "10": "[]"
+         }
+    },
+    "wlr/taskbar": {
+        "format": "{icon}",
+        "icon-size": 20,
+        "icon-theme": "Star",
+        "tooltip-format": "{title}",
+        "on-click": "activate",
+        "on-click-middle": "close",
+        "on-click-right": "minimize"
+    },
+    "hyprland/window": {
+        "format": "{title}",
+        "max-length": 50, //     ϰ  𝓔            🌎 
+        "rewrite": {
+            "(.*) - Mozilla Firefox": " [$1]",
+            "(.*) - nvim": " [$1]",
+            "(.*) - fish": " [$1]",
+            "(.*) - kitty": " [$1]",
+	    "(.*) - emacs": " [$1]"
+        }
+    },
+    
+    // Modules configuration
+    "wlr/taskbar":{
+        "on-click": "activate",
+    },
+    "tray": {
+        "icon-size": 31,
+        "spacing": 20
+    },
+    "clock": {
+        // "timezone": "America/New_York",
+	"tooltip-format": "{:%A_%d_de_%B_%Y_|_%H:%M}",
+        // "tooltip-format": "<big>{:%d. %B %Y}</big>\n<tt><small>{calendar}</small></tt>",
+	// "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
+	// "format": " {:%a %d %b  %I:%M %p}",	//12 hour format
+	"format": "  {:%a %d %b   %H:%M}",	//24 hour format
+        "format-alt": "{:%d.%m.%y}",
+	"interval": 60,
+   	"on-click-right":"gnome-calendar",
+	"on-click-middle":"gnome-clocks"
+    },
+    "cpu": {
+  	"tooltip": false,
+	"interval": 10,
+        "format": "󰻠 {usage}%",  //  
+        "on-click": "kitty --start-as=fullscreen --title btop sh -c 'btop'"
+    },
+    "memory": {
+        "interval": 30,
+        "format": " {}%",
+        "max-length": 10,
+        "tooltip": true,
+        "tooltip-format": "Memory - {used:0.1f}GB used",
+        "on-click": "kitty --start-as=fullscreen --title btop sh -c 'btop'"
+    },
+
+    "temperature": {
+        // "thermal-zone": 2,
+        // "hwmon-path": "/sys/class/hwmon/hwmon2/temp1_input",
+        "critical-threshold": 80,
+        "format-critical": " {temperatureC}°C",
+        "format": " {temperatureC}°C",
+        "format-icons": ["", "", ""]
+    },
+    "backlight": {
+        // "device": "acpi_video1",
+        "format": "{icon} {percent}%",
+        "format-icons": ["", "", "", "", "", "", "", "", ""],
+	"on-scroll-down": "brightnessctl -c backlight set 5%-",
+        "on-scroll-up": "brightnessctl -c backlight set +5%"
+    },
+    "battery": {
+        "states": {
+            // "good": 95,
+            "warning": 30,
+            "critical": 15
+        },
+        "format": "{capacity}% {icon}",
+        "format-charging": "{capacity}% ",
+        "format-plugged": "{capacity}% ",
+        "format-alt": "{time} {icon}",
+        // "format-good": "", // An empty format will hide the module
+        // "format-full": "",
+        "format-icons": ["", "", "", "", ""]
+    },
+    "disk": {
+        "interval": 30,
+	"format": "󰋊 {percentage_free:2}%", // 🖴 percentage_used
+	"path": "/",
+	"tooltip": true,
+        "tooltip-format": "HDD - {used} used out of {total} on {path} (Used:{percentage_used}%)",
+        "on-click": "kitty --start-as=fullscreen --title btop sh -c 'btop'"
+    },
+    "network": {
+        "interface": "enp39*", // (Optional) To force the use of this interface
+        "format-wifi": " {essid} ({signalStrength}%)",
+        "format-ethernet": "󰈀 {ipaddr}/{cidr}",
+        "tooltip-format": " {ifname} via {gwaddr}",
+        "format-linked": "󰈂 {ifname} (No IP)",
+        "format-disconnected": "󰈂 Disconnected",
+        "format-alt": "{ifname}: {ipaddr}/{cidr}"
+   },
+   "pulseaudio": {
+        "scroll-step": 5, // %, can be a float
+        "format": "{icon} {volume}%",
+        "format-bluetooth": "{volume}% {icon} {format_source}",
+        "format-bluetooth-muted": " {icon} {format_source}",
+        "format-muted": "{volume}% ",
+        "format-source": "{volume}% ",
+        "format-source-muted": "",
+        "format-icons": {
+            "headphone": "",
+            "hands-free": "",
+            "headset": "",
+            "phone": "",
+            "portable": "",
+            "car": "",
+            "default": ["", "", ""]
+        },
+        "on-click": "pavucontrol",
+        "on-click-right":"pactl set-sink-mute 3 toggle"
+    },
+    "custom/launcher":{
+        "format": "󱄅", // 
+        "on-click": "nwg-drawer",
+        "on-click-right": "killall -9 nwg-drawer"
+    },
+    "custom/power":{
+        "format": "⏻",
+        "on-click": "wlogout", // "nwg-bar",
+        "on-click-right": "killall -9 wlogout" // nwg-bar"
+    },
+}
