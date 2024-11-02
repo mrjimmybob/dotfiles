@@ -3,7 +3,7 @@
     "layer": "top", // Waybar at top layer
     "position": "top", // Waybar position (top|bottom|left|right)
     "height": 35, // Waybar height (to be removed for auto height)
-    // "width": 3840, // 1280, // Waybar width
+    "width": 3840, // 1280, // Waybar width
     "spacing": 2, // Gaps between modules (pixels)
     "padding": 2,
     "margin-top": 2,
@@ -189,11 +189,11 @@
     "custom/launcher":{
         "format": "󱄅", // 
         "on-click": "nwg-drawer",
-        "on-click-right": "killall -9 nwg-drawer"
+        "on-click-right": "ps ax | grep nwg-drawer | awk '{ print $1 }' | xargs kill -9"
     },
     "custom/power":{
-        "format": "⏻",
+          "format": "⏻ ",
         "on-click": "wlogout", // "nwg-bar",
-        "on-click-right": "killall -9 wlogout" // nwg-bar"
+        "on-click-right": "ps ax | grep wlogout | awk '{ print $1 }' | xargs kill -9"
     },
 }

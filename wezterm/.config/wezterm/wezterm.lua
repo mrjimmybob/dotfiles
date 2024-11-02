@@ -18,12 +18,23 @@ local opacity  = selector.new({ title = "Opacity Selector",       subdir = "opac
 
 -- Default tab names
 local TAB_NAME_ICON   = {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' }
--- Default tab icons
+--cfault tab icons
 local TAB_NUMBER_ICON = {'󰎤', '󰎧', '󰎪', '󰎭', '󰎱', '󰎳', '󰎶', '󰎹', '󰎼', '󰎡' }
 -- Default zoomed tab icons
 local TAB_ZOOMED_ICON = {'󰼏', '󰼐', '󰼑', '󰼒', '󰼓', '󰼔', '󰼕', '󰼖', '󰼗', '󰼎' }
 
-local LEADER_ICON = "   " -- .. utf8.char(0x1f30a) -- ocean wave       󰠗  󱜺  .
+local is_darwin <const> = wezterm.target_triple:find("darwin") ~= nil
+local is_linux <const> = wezterm.target_triple:find("linux") ~= nil
+local is_windows <const> = wezterm.target_triple:find("windows") ~= nil
+
+local LEADER_ICON = "   " -- .. utf8.char(0x1f30a) -- ocean wave       󰠗  󱜺  .
+if (is_darwin) then
+  LEADER_ICON = "   "
+elseif (is_windows) then
+  LEADER_ICON = "   "
+elseif (is_linux) then
+  LEADER_ICON = "   "  -- "   "
+end
 -- local TAB_NAME_ICON   = {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' }
 -- local TAB_NAME_ICON   = {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' }
 -- local TAB_NAME_ICON   = {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' }
@@ -38,7 +49,7 @@ local LEADER_ICON = "   " -- .. utf8.char(0x1f30a) -- ocean wave     �
 -- local magnify_icon = ' 󰛭 '
 -- local magnify_icon = '🔎'
 --               .
---       󰣚  󰣭                                      󰖳  .
+--       󰣚  󰣭                                    󰣠    󰖳  .
 -- local TAB_NUMBER_ICON = {'❶', '❷', '❸', '❹', '❺', '❻', '❼', '❽', '❾' }
 -- local TAB_NUMBER_ICON = {'①', '②', '③', '④', '⑤', '⑥', '⑦', '⑧', '⑨' }
 -- local TAB_NUMBER_ICON = {'⓵', '⓶', '⓷', '⓸', '⓹', '⓺', '⓻', '⓼', '⓽' }
@@ -126,13 +137,9 @@ config.cell_width = 0.9
 
 local user = os.getenv("USER") or os.getenv("USERNAME") or os.getenv("LOGNAME")
 if user == "mr_ji" then
-	initialDirectory = "D:\\MyDocuments"
 	config.default_prog = { "pwsh.exe", "-wd", "D:\\MyDocuments", "-NoLogo" }
 elseif user == "USRVA36" then
 	config.default_prog = { "pwsh.exe", "-wd", "D:\\Datos\\CodigoFuente", "-NoLogo" }
-else
-
-	-- config.default_prog = { "/bin/fish", "-wd", initialDirectory, "-NoLogo" }
 end
 
 config.initial_cols = 110
