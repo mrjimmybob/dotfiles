@@ -80,9 +80,11 @@ config.font = wezterm.font_with_fallback({
 
 -- schemes:select(config, "Catppuccin Mocha")
 if appearance.is_dark() then
-	config.color_scheme = "Tokyo Night"
+    -- config.color_scheme = "Tokyo Night"
+    config.color_scheme = "Gruvbox Dark (Gogh)"
 else
-	config.color_scheme = "Tokyo Night Day"
+	  -- config.color_scheme = "Tokyo Night Day"
+	  config.color_scheme = "Gruvbox light, medium (base16)"
 end
 
 -- local gpus = wezterm.gui.enumerate_gpus()
@@ -166,8 +168,8 @@ config.keys = {
 	{ key = "r", mods = "SHIFT|CTRL|ALT", action = wezterm.action.ReloadConfiguration },
 	{ key = "l", mods = "SHIFT|CTRL|ALT", action = wezterm.action.ShowDebugOverlay },
 	{ key = "f", mods = "LEADER", action = wezterm.action.ToggleFullScreen },
-	{ key = "\\", mods = "LEADER", action = wezterm.action.SplitHorizontal({ domain = "CurrentPaneDomain" }) },
-	{ key = "/", mods = "LEADER", action = wezterm.action.SplitVertical({ domain = "CurrentPaneDomain" }) },
+	{ key = "\\",mods = "LEADER", action = wezterm.action.SplitHorizontal({ domain = "CurrentPaneDomain" }) },
+	{ key = "-", mods = "LEADER", action = wezterm.action.SplitVertical({ domain = "CurrentPaneDomain" }) },
 	{ key = "h", mods = "LEADER", action = wezterm.action.SplitPane({ direction = "Down", size = { Percent = 50 } }) },
 	{ key = "v", mods = "LEADER", action = wezterm.action.SplitPane({ direction = "Right", size = { Percent = 50 } }), },
 	{ key = "s", mods = "LEADER", action = wezterm.action.PaneSelect },
