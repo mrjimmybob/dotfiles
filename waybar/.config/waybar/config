@@ -188,8 +188,8 @@
     },
     "custom/launcher":{
         "format": "󱄅", // 
-        "on-click": "nwg-drawer",
-        "on-click-right": "ps ax | grep nwg-drawer | awk '{ print $1 }' | xargs kill -9"
+        "on-click": "rofi -show drun" // nwg-drawer
+        // "on-click-right": "ps ax | grep rofi | awk '{ print $1 }' | xargs kill -9"
     },
     "custom/power":{
           "format": "⏻ ",
