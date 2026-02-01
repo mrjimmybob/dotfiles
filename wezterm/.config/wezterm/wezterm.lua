@@ -35,8 +35,11 @@ local TAB_NAME_ICON   = {' ', ' ', ' ', ' ', ' ', ' ', ' ',
 local TAB_NUMBER_ICON = {'󰎤', '󰎧', '󰎪', '󰎭', '󰎱', '󰎳', '󰎶', '󰎹', '󰎼', '󰎡' }
 -- Default zoomed tab icons
 local TAB_ZOOMED_ICON = {'󰼏', '󰼐', '󰼑', '󰼒', '󰼓', '󰼔', '󰼕', '󰼖', '󰼗', '󰼎' }
-
-local LEADER_ICON = "   " -- .. utf8.char(0x1f30a) -- ocean wave       󰠗  󱜺  .
+-- .. utf8.char(0x1f30a) -- ocean wave       󰠗  󱜺  .
+local LEADER_ICON = "  "
+if is_windows then
+	LEADER_ICON = "  "
+end 
 -- local TAB_NAME_ICON   = {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' }
 -- local TAB_NAME_ICON   = {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' }
 -- local TAB_NAME_ICON   = {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' }
@@ -58,7 +61,8 @@ local LEADER_ICON = "   " -- .. utf8.char(0x1f30a) -- ocean wave     �
 -- Windows = '', '󰣇', '' , '󰀵' ,
 -- stylua: ignore end
 
-fonts:select(config, "Hasklug")
+-- fonts:select(config, "Hasklug")
+-- fonts:select(config, "Hasklug")
 -- config.font = wezterm.font("Iosevka Custom")
 -- config.font = wezterm.font("Monocraft Nerd Font")
 -- config.font = wezterm.font("FiraCode Nerd Font")
@@ -74,12 +78,12 @@ fonts:select(config, "Hasklug")
 -- config.font = wezterm.font("M+ 1m")
 -- config.font = wezterm.font("Hack Regular")
 config.cell_width = 1
-config.line_height = 1
+config.line_height = 1.1
 config.font_size = 18.0 -- Or use font defined size!
 
-config.font = wezterm.font_with_fallback({
-	"Consolas",
-})
+-- config.font = wezterm.font_with_fallback({
+-- 	"Victor Mono", "Consolas"
+-- })
 
 -- schemes:select(config, "Catppuccin Mocha")
 if appearance.is_dark() then
@@ -92,15 +96,14 @@ end
 
 -- config.window_background_image = "C:\\Users\\mr_ji\\.config\\wezterm\\wallpaper\\wall.jpg"
 -- local wallpaper = is_windows and "C:\\Users\\mr_ji\\.config\\wezterm\\wallpaper\\wall.jpg" or "/home/dallas/.config/wezterm/wallpaper/wall.jpg"
-local wallpaper = home .. "/.config/wezterm/wallpaper/wall.jpg"
+-- local wallpaper = home .. "/.config/wezterm/wallpaper/wall.jpg"
+local wallpaper = home .. "/.config/wezterm/wallpaper/wall2.jpg"
 -- Fix Windows path slashes
-if package.config:sub(1,1) == "\\" then
+if package.config:sub(1, 1) == "\\" then
 	wallpaper = wallpaper:gsub("/", "\\")
 end
 
 config.window_background_image = wallpaper
-
-
 
 -- local gpus = wezterm.gui.enumerate_gpus()
 -- config.webgpu_preferred_adapter = gpus[1]
@@ -151,8 +154,6 @@ config.default_cursor_style = "BlinkingBlock"
 config.animation_fps = 1
 config.cursor_blink_rate = 500
 config.term = "xterm-256color" -- Set the terminal type
-
-config.cell_width = 0.9
 
 local user = os.getenv("USER") or os.getenv("USERNAME") or os.getenv("LOGNAME")
 if user == "mr_ji" then
