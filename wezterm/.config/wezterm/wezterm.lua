@@ -35,11 +35,11 @@ local TAB_NAME_ICON   = {' ', ' ', ' ', ' ', ' ', ' ', ' ',
 local TAB_NUMBER_ICON = {'󰎤', '󰎧', '󰎪', '󰎭', '󰎱', '󰎳', '󰎶', '󰎹', '󰎼', '󰎡' }
 -- Default zoomed tab icons
 local TAB_ZOOMED_ICON = {'󰼏', '󰼐', '󰼑', '󰼒', '󰼓', '󰼔', '󰼕', '󰼖', '󰼗', '󰼎' }
--- .. utf8.char(0x1f30a) -- ocean wave       󰠗  󱜺  .
-local LEADER_ICON = "  "
+-- .. utf8.char(0x1f30a) -- ocean wave       󰠗  󱜺  .
+local LEADER_ICON = "  "
 if is_windows then
-	LEADER_ICON = "  "
-end 
+	LEADER_ICON = "  "
+end
 -- local TAB_NAME_ICON   = {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' }
 -- local TAB_NAME_ICON   = {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' }
 -- local TAB_NAME_ICON   = {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' }
@@ -59,6 +59,7 @@ end
 -- local TAB_NUMBER_ICON = {'①', '②', '③', '④', '⑤', '⑥', '⑦', '⑧', '⑨' }
 -- local TAB_NUMBER_ICON = {'⓵', '⓶', '⓷', '⓸', '⓹', '⓺', '⓻', '⓼', '⓽' }
 -- Windows = '', '󰣇', '' , '󰀵' ,
+
 -- stylua: ignore end
 
 -- fonts:select(config, "Hasklug")
@@ -78,8 +79,8 @@ end
 -- config.font = wezterm.font("M+ 1m")
 -- config.font = wezterm.font("Hack Regular")
 config.cell_width = 1
-config.line_height = 1.1
-config.font_size = 18.0 -- Or use font defined size!
+config.line_height = 1
+config.font_size = 20.0 -- Or use font defined size!
 
 -- config.font = wezterm.font_with_fallback({
 -- 	"Victor Mono", "Consolas"
@@ -87,8 +88,9 @@ config.font_size = 18.0 -- Or use font defined size!
 
 -- schemes:select(config, "Catppuccin Mocha")
 if appearance.is_dark() then
-	config.color_scheme = "Brewer (dark) (terminal.sexy)"
--- config.color_scheme = "Tokyo Night"
+	-- config.color_scheme = "Brewer (dark) (terminal.sexy)"
+	-- config.color_scheme = "Tokyo Night"
+	config.color_scheme = "Catppuccin Mocha"
 else
 	config.color_scheme = "Brewer (light) (terminal.sexy)"
 	-- config.color_scheme = "Tokyo Night Day"
@@ -124,7 +126,7 @@ config.mouse_bindings = {
 		mods = "NONE",
 	},
 }
-config.window_background_opacity = 0.9
+config.window_background_opacity = current_opacity
 -- config.window_close_confirmation = "AlwaysPrompt"
 config.window_padding = {
 	left = 2,
@@ -144,10 +146,10 @@ config.use_fancy_tab_bar = false
 -- 	brightness = 1.0,
 -- }
 
-config.front_end = "OpenGL"
+-- config.front_end = "OpenGL"
 -- local gpus = wezterm.gui.enumerate_gpus()
 -- config.webgpu_preferred_adapter = gpus and gpus[1] or nil
--- config.front_end = "WebGpu"
+config.front_end = "WebGpu"
 
 config.max_fps = 144
 config.default_cursor_style = "BlinkingBlock"
@@ -330,7 +332,7 @@ config.key_tables = {
 }
 
 -- For example, changing the color scheme:
-config.color_scheme = "Cloud (terminal.sexy)"
+--config.color_scheme = "Cloud (terminal.sexy)"
 config.colors = {
 	background = "#0c0b0f", -- dark purple
 	cursor_border = "#bea3c7",
@@ -389,37 +391,45 @@ config.colors = {
 
 -- Cycle through builtin dark schemes in dark mode, and through light schemes in light mode
 
+-- Theme cycling cache: builtin schemes don't change at runtime, so build the lists once.
+local cached_dark_schemes = nil
+local cached_light_schemes = nil
+
 wezterm.on("cycleTheme", function(window, pane)
-	local allSchemes = wezterm.color.get_builtin_schemes()
-	local currentMode = wezterm.gui.get_appearance()
-	local currentScheme = window:effective_config().color_scheme
-	local darkSchemes = {}
-	local lightSchemes = {}
-
-	wezterm.log_info("Current Theme : " .. currentScheme)
-
-	for name, scheme in pairs(allSchemes) do
-		if scheme.background then
-			local bg = wezterm.color.parse(scheme.background) -- parse into a color object
-			-- -@diagnostic disable-next-line: unused-local
-			local h, s, l, a = bg:hsla() -- and extract HSLA information
-			wezterm.log_info("s:" .. s .. ", a:" .. a .. ", h:" .. h)
-
-			if l < 0.4 then
-				table.insert(darkSchemes, name)
-			else
-				table.insert(lightSchemes, name)
+	-- Build dark/light scheme lists on first call and cache them.
+	if not cached_dark_schemes then
+		local allSchemes = wezterm.color.get_builtin_schemes()
+		cached_dark_schemes = {}
+		cached_light_schemes = {}
+		for name, scheme in pairs(allSchemes) do
+			if scheme.background then
+				local bg = wezterm.color.parse(scheme.background)
+				-- -@diagnostic disable-next-line: unused-local
+				local h, s, l, a = bg:hsla()
+				wezterm.log_info("s:" .. s .. ", a:" .. a .. ", h:" .. h)
+				if l < 0.4 then
+					table.insert(cached_dark_schemes, name)
+				else
+					table.insert(cached_light_schemes, name)
+				end
 			end
 		end
 	end
-	local schemesToSearch = currentMode:find("Dark") and darkSchemes or lightSchemes
+
+	local currentMode = wezterm.gui.get_appearance()
+	local currentScheme = window:effective_config().color_scheme
+
+	wezterm.log_info("Current Theme : " .. currentScheme)
+
+	local schemesToSearch = currentMode:find("Dark") and cached_dark_schemes or cached_light_schemes
 
 	for i = 1, #schemesToSearch, 1 do
 		wezterm.log_info("Searching through " .. #schemesToSearch .. " schemes: " .. schemesToSearch[i])
 		if schemesToSearch[i] == currentScheme then
 			wezterm.log_info('Going to switch to theme: "' .. schemesToSearch[i + 1] .. '"')
 			local overrides = window:get_config_overrides() or {}
-			overrides.color_scheme = schemesToSearch[i + 1]
+			local next = schemesToSearch[i + 1] or schemesToSearch[1]
+			overrides.color_scheme = next
 			window:set_config_overrides(overrides)
 			return
 		end
@@ -474,6 +484,7 @@ wezterm.on("increaseOpacity", function(window)
 	if overrides.window_background_opacity > 1.0 then
 		overrides.window_background_opacity = 1.0
 	end
+	current_opacity = overrides.window_background_opacity
 	window:set_config_overrides(overrides)
 end)
 
@@ -484,6 +495,7 @@ wezterm.on("decreaseOpacity", function(window)
 	if overrides.window_background_opacity < 0 then
 		overrides.window_background_opacity = 0
 	end
+	current_opacity = overrides.window_background_opacity
 	window:set_config_overrides(overrides)
 end)
 
@@ -503,9 +515,11 @@ wezterm.on("kaz-dec-font-size", function(window)
 	window:set_config_overrides(overrides)
 end)
 
+-- Pre-computed constant for format-tab-title (avoids per-call allocation)
+local ACTIVE_TAB_COLOR = { Foreground = { Color = "#663A82" } }
+
 -- Customize the tab title to show zoom icon when zoomed
 wezterm.on("format-tab-title", function(tab)
-	local ACTIVE_TAB_COLOR = { Foreground = { Color = "#663A82" } }
 	local attrs = {
 		{ Foreground = { Color = "#777777" } },
 	}
@@ -528,26 +542,49 @@ wezterm.on("format-tab-title", function(tab)
 	return attrs
 end)
 
+-- Pre-computed constants for update-right-status (computed once at startup, not on every call)
+local SOLID_LEFT_ARROW  = utf8.char(0xe0b2)
+local STATUS_FOREGROUND = { Foreground = { Color = "Cyan" } }
+local STATUS_TEXT_FG    = "#c0c0c0"
+local STATUS_COLORS     = { "#3C1361", "#52307C", "#663A82", "#7C5295", "#B491C8" }
+
+-- Hostname never changes; cache it once.
+local cached_hostname = wezterm.hostname()
+
+-- Battery info cache: wezterm.battery_info() is a system call; throttle to once per 30s.
+local battery_cache = { cells = {}, last_time = 0 }
+local BATTERY_CACHE_TTL = 30
+
+-- Per-window cache to avoid redundant set_left_status / set_right_status API calls.
+local window_status_cache = {}
+
+-- Module-level push helper (avoids recreating a closure on every update-right-status call)
+local function push_cell(elements, cell_no, text)
+	table.insert(elements, { Foreground = { Color = STATUS_COLORS[cell_no] } })
+	table.insert(elements, { Text = SOLID_LEFT_ARROW })
+	table.insert(elements, { Foreground = { Color = STATUS_TEXT_FG } })
+	table.insert(elements, { Background = { Color = STATUS_COLORS[cell_no] } })
+	table.insert(elements, { Text = " " .. text .. " " })
+end
+
 wezterm.on("update-right-status", function(window, pane)
-	-- local FOREGROUND = { Foreground = { Color = "#3C1361" } }
-	local FOREGROUND = { Foreground = { Color = "Cyan" } }
-	local prefix = ""
+	local is_leader = window:leader_is_active()
+	local win_id    = window:window_id()
 
-	if window:leader_is_active() then
-		prefix = LEADER_ICON -- "   " -- .. utf8.char(0x1f30a) -- ocean wave       󰠗  󱜺  .
+	-- Initialize per-window cache on first sight of this window.
+	if not window_status_cache[win_id] then
+		window_status_cache[win_id] = { last_leader = nil, last_right = nil }
 	end
+	local cache = window_status_cache[win_id]
 
-	window:set_left_status(wezterm.format({
-		FOREGROUND,
-		{ Text = prefix },
-	}))
-
-	local leader = ""
-
-	if window:leader_is_active() then
-		leader = "LEADER"
+	-- Update left status only when leader state actually changes.
+	if is_leader ~= cache.last_leader then
+		cache.last_leader = is_leader
+		window:set_left_status(wezterm.format({
+			STATUS_FOREGROUND,
+			{ Text = is_leader and LEADER_ICON or "" },
+		}))
 	end
-	window:set_right_status(leader)
 
 	-- Each element holds the text for a cell in a "powerline" style << fade
 	local cells = {}
@@ -565,7 +602,7 @@ wezterm.on("update-right-status", function(window, pane)
 			-- a URL object here, making this simple!
 
 			cwd = cwd_uri.file_path
-			hostname = cwd_uri.host or wezterm.hostname()
+			hostname = cwd_uri.host or cached_hostname
 		else
 			-- an older version of wezterm, 20230712-072601-f4abf8fd or earlier,
 			-- which doesn't have the Url object
@@ -586,7 +623,7 @@ wezterm.on("update-right-status", function(window, pane)
 			hostname = hostname:sub(1, dot - 1)
 		end
 		if hostname == "" then
-			hostname = wezterm.hostname()
+			hostname = cached_hostname
 		end
 
 		table.insert(cells, cwd)
@@ -598,53 +635,31 @@ wezterm.on("update-right-status", function(window, pane)
 	local date = wezterm.strftime("%a %-d %b %H:%M")
 	table.insert(cells, date)
 
-	-- An entry for each battery (typically 0 or 1 battery)
-	for _, b in ipairs(wezterm.battery_info()) do
-		table.insert(cells, string.format("%.0f%%", b.state_of_charge * 100))
+	-- An entry for each battery, cached to avoid a system call every second.
+	local now = os.time()
+	if now - battery_cache.last_time >= BATTERY_CACHE_TTL then
+		battery_cache.cells = {}
+		for _, b in ipairs(wezterm.battery_info()) do
+			table.insert(battery_cache.cells, string.format("%.0f%%", b.state_of_charge * 100))
+		end
+		battery_cache.last_time = now
+	end
+	for _, cell in ipairs(battery_cache.cells) do
+		table.insert(cells, cell)
 	end
 
-	-- The powerline < symbol
-	--	local LEFT_ARROW = utf8.char(0xe0b3)
-	-- The filled in variant of the < symbol
-	local SOLID_LEFT_ARROW = utf8.char(0xe0b2)
-
-	-- Color palette for the backgrounds of each cell
-	local colors = {
-		"#3C1361",
-		"#52307C",
-		"#663A82",
-		"#7C5295",
-		"#B491C8",
-	}
-
-	-- Foreground color for the text across the fade
-	local text_fg = "#c0c0c0"
-
-	-- The elements to be formatted
+	-- Build the formatted elements
 	local elements = {}
-	-- How many cells have been formatted
-	local num_cells = 0
-
-	-- Translate a cell into elements
-	function Push(text)
-		local cell_no = num_cells + 1
-
-		--if not is_last then
-		table.insert(elements, { Foreground = { Color = colors[cell_no] } })
-		table.insert(elements, { Text = SOLID_LEFT_ARROW })
-		--		end
-		table.insert(elements, { Foreground = { Color = text_fg } })
-		table.insert(elements, { Background = { Color = colors[cell_no] } })
-		table.insert(elements, { Text = " " .. text .. " " })
-		num_cells = num_cells + 1
+	for i, text in ipairs(cells) do
+		push_cell(elements, i, text)
 	end
 
-	while #cells > 0 do
-		local cell = table.remove(cells, 1)
-		Push(cell)
+	-- Only call set_right_status when the rendered content actually changes.
+	local right_status = wezterm.format(elements)
+	if right_status ~= cache.last_right then
+		cache.last_right = right_status
+		window:set_right_status(right_status)
 	end
-
-	window:set_right_status(wezterm.format(elements))
 end)
 
 -- and finally, return the configuration to wezterm
