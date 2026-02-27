@@ -35,11 +35,8 @@ local TAB_NAME_ICON   = {' ', ' ', ' ', ' ', ' ', ' ', ' ',
 local TAB_NUMBER_ICON = {'󰎤', '󰎧', '󰎪', '󰎭', '󰎱', '󰎳', '󰎶', '󰎹', '󰎼', '󰎡' }
 -- Default zoomed tab icons
 local TAB_ZOOMED_ICON = {'󰼏', '󰼐', '󰼑', '󰼒', '󰼓', '󰼔', '󰼕', '󰼖', '󰼗', '󰼎' }
--- .. utf8.char(0x1f30a) -- ocean wave       󰠗  󱜺  .
-local LEADER_ICON = "  "
-if is_windows then
-	LEADER_ICON = "  "
-end
+
+local LEADER_ICON = "   " -- .. utf8.char(0x1f30a) -- ocean wave       󰠗  󱜺  .
 -- local TAB_NAME_ICON   = {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' }
 -- local TAB_NAME_ICON   = {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' }
 -- local TAB_NAME_ICON   = {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' }
@@ -59,11 +56,9 @@ end
 -- local TAB_NUMBER_ICON = {'①', '②', '③', '④', '⑤', '⑥', '⑦', '⑧', '⑨' }
 -- local TAB_NUMBER_ICON = {'⓵', '⓶', '⓷', '⓸', '⓹', '⓺', '⓻', '⓼', '⓽' }
 -- Windows = '', '󰣇', '' , '󰀵' ,
-
 -- stylua: ignore end
 
--- fonts:select(config, "Hasklug")
--- fonts:select(config, "Hasklug")
+fonts:select(config, "Hasklug")
 -- config.font = wezterm.font("Iosevka Custom")
 -- config.font = wezterm.font("Monocraft Nerd Font")
 -- config.font = wezterm.font("FiraCode Nerd Font")
@@ -80,17 +75,16 @@ end
 -- config.font = wezterm.font("Hack Regular")
 config.cell_width = 1
 config.line_height = 1
-config.font_size = 20.0 -- Or use font defined size!
+config.font_size = 22.0 -- Or use font defined size!
 
--- config.font = wezterm.font_with_fallback({
--- 	"Victor Mono", "Consolas"
--- })
+config.font = wezterm.font_with_fallback({
+	"Consolas",
+})
 
 -- schemes:select(config, "Catppuccin Mocha")
 if appearance.is_dark() then
-	-- config.color_scheme = "Brewer (dark) (terminal.sexy)"
-	-- config.color_scheme = "Tokyo Night"
-	config.color_scheme = "Catppuccin Mocha"
+	config.color_scheme = "Brewer (dark) (terminal.sexy)"
+-- config.color_scheme = "Tokyo Night"
 else
 	config.color_scheme = "Brewer (light) (terminal.sexy)"
 	-- config.color_scheme = "Tokyo Night Day"
@@ -98,14 +92,15 @@ end
 
 -- config.window_background_image = "C:\\Users\\mr_ji\\.config\\wezterm\\wallpaper\\wall.jpg"
 -- local wallpaper = is_windows and "C:\\Users\\mr_ji\\.config\\wezterm\\wallpaper\\wall.jpg" or "/home/dallas/.config/wezterm/wallpaper/wall.jpg"
--- local wallpaper = home .. "/.config/wezterm/wallpaper/wall.jpg"
 local wallpaper = home .. "/.config/wezterm/wallpaper/wall2.jpg"
 -- Fix Windows path slashes
-if package.config:sub(1, 1) == "\\" then
+if package.config:sub(1,1) == "\\" then
 	wallpaper = wallpaper:gsub("/", "\\")
 end
 
 config.window_background_image = wallpaper
+
+
 
 -- local gpus = wezterm.gui.enumerate_gpus()
 -- config.webgpu_preferred_adapter = gpus[1]
@@ -126,7 +121,7 @@ config.mouse_bindings = {
 		mods = "NONE",
 	},
 }
-config.window_background_opacity = current_opacity
+config.window_background_opacity = 0.9
 -- config.window_close_confirmation = "AlwaysPrompt"
 config.window_padding = {
 	left = 2,
@@ -146,16 +141,18 @@ config.use_fancy_tab_bar = false
 -- 	brightness = 1.0,
 -- }
 
--- config.front_end = "OpenGL"
+config.front_end = "OpenGL"
 -- local gpus = wezterm.gui.enumerate_gpus()
 -- config.webgpu_preferred_adapter = gpus and gpus[1] or nil
-config.front_end = "WebGpu"
+-- config.front_end = "WebGpu"
 
 config.max_fps = 144
 config.default_cursor_style = "BlinkingBlock"
 config.animation_fps = 1
 config.cursor_blink_rate = 500
 config.term = "xterm-256color" -- Set the terminal type
+
+config.cell_width = 0.9
 
 local user = os.getenv("USER") or os.getenv("USERNAME") or os.getenv("LOGNAME")
 if user == "mr_ji" then
@@ -332,7 +329,7 @@ config.key_tables = {
 }
 
 -- For example, changing the color scheme:
---config.color_scheme = "Cloud (terminal.sexy)"
+config.color_scheme = "Cloud (terminal.sexy)"
 config.colors = {
 	background = "#0c0b0f", -- dark purple
 	cursor_border = "#bea3c7",
@@ -484,7 +481,6 @@ wezterm.on("increaseOpacity", function(window)
 	if overrides.window_background_opacity > 1.0 then
 		overrides.window_background_opacity = 1.0
 	end
-	current_opacity = overrides.window_background_opacity
 	window:set_config_overrides(overrides)
 end)
 
@@ -495,7 +491,6 @@ wezterm.on("decreaseOpacity", function(window)
 	if overrides.window_background_opacity < 0 then
 		overrides.window_background_opacity = 0
 	end
-	current_opacity = overrides.window_background_opacity
 	window:set_config_overrides(overrides)
 end)
 
@@ -514,9 +509,6 @@ wezterm.on("kaz-dec-font-size", function(window)
 	overrides.font_size = size
 	window:set_config_overrides(overrides)
 end)
-
--- Pre-computed constant for format-tab-title (avoids per-call allocation)
-local ACTIVE_TAB_COLOR = { Foreground = { Color = "#663A82" } }
 
 -- Customize the tab title to show zoom icon when zoomed
 wezterm.on("format-tab-title", function(tab)
@@ -542,11 +534,14 @@ wezterm.on("format-tab-title", function(tab)
 	return attrs
 end)
 
+-- Pre-computed constant for format-tab-title (avoids per-call allocation)
+local ACTIVE_TAB_COLOR = { Foreground = { Color = "#663A82" } }
+
 -- Pre-computed constants for update-right-status (computed once at startup, not on every call)
-local SOLID_LEFT_ARROW  = utf8.char(0xe0b2)
+local SOLID_LEFT_ARROW = utf8.char(0xe0b2)
 local STATUS_FOREGROUND = { Foreground = { Color = "Cyan" } }
-local STATUS_TEXT_FG    = "#c0c0c0"
-local STATUS_COLORS     = { "#3C1361", "#52307C", "#663A82", "#7C5295", "#B491C8" }
+local STATUS_TEXT_FG = "#c0c0c0"
+local STATUS_COLORS = { "#3C1361", "#52307C", "#663A82", "#7C5295", "#B491C8" }
 
 -- Hostname never changes; cache it once.
 local cached_hostname = wezterm.hostname()
@@ -569,7 +564,7 @@ end
 
 wezterm.on("update-right-status", function(window, pane)
 	local is_leader = window:leader_is_active()
-	local win_id    = window:window_id()
+	local win_id = window:window_id()
 
 	-- Initialize per-window cache on first sight of this window.
 	if not window_status_cache[win_id] then
