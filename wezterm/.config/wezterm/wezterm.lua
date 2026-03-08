@@ -90,17 +90,60 @@ else
 	config.color_scheme = "Tokyo Night Day"
 end
 
--- Set wallpaper:
-local wallpaper = home .. "/.config/wezterm/wallpaper/wall.jpg"
-local wallpaper = home .. "/.config/wezterm/wallpaper/wall2.jpg"
+-- For example, changing the color scheme:
+config.colors = {
+	-- background = "rgba(12,11,15,0.85)",
+	background    = "#0c0b0f", -- dark purple
+	cursor_border = "#bea3c7",
+	cursor_bg     = "#bea3c7",
+	selection_fg  = "#281733",
 
--- Fix Windows path slashes
-if package.config:sub(1, 1) == "\\" then
-	wallpaper = wallpaper:gsub("/", "\\")
+	tab_bar       = {
+		background   = "#0c0b0f",
+		active_tab   = {
+			bg_color      = "#0c0b0f",
+			fg_color      = "#bea3c7",
+			intensity     = "Normal",
+			underline     = "None",
+			italic        = false,
+			strikethrough = false,
+		},
+		inactive_tab = {
+			bg_color      = "#0c0b0f",
+			fg_color      = "#f8f2f5",
+			intensity     = "Normal",
+			underline     = "None",
+			italic        = false,
+			strikethrough = false,
+		},
+
+		new_tab      = {
+			-- bg_color = "rgba(59, 34, 76, 50%)",
+			bg_color = "#0c0b0f",
+			fg_color = "white",
+		},
+	},
+}
+
+-- Set wallpaper:
+--local wallpaper = home .. "/.config/wezterm/wallpaper/wall2.jpg"
+local wallpapers = {
+  home .. "/.config/wezterm/wallpaper/AsukaWall1.png",
+  home .. "/.config/wezterm/wallpaper/AsukaWall2.png",
+  home .. "/.config/wezterm/wallpaper/AsukaWall3.png",
+  home .. "/.config/wezterm/wallpaper/AsukaWall4.png",
+}
+
+-- stable selection tied to the wezterm process
+local pid = wezterm.procinfo.pid()
+local idx = (pid % #wallpapers) + 1
+local selected_wallpaper = wallpapers[idx]
+
+if package.config:sub(1,1) == "\\" then
+  selected_wallpaper = selected_wallpaper:gsub("/", "\\")
 end
 
-config.window_background_image = wallpaper
-
+config.window_background_image = selected_wallpaper
 -- local gpus = wezterm.gui.enumerate_gpus()
 -- config.webgpu_preferred_adapter = gpus[1]
 config.use_resize_increments = false
@@ -120,7 +163,7 @@ config.mouse_bindings = {
 		mods = "NONE",
 	},
 }
-config.window_background_opacity = 0.9
+config.window_background_opacity = 0.90
 -- config.window_close_confirmation = "AlwaysPrompt"
 config.window_padding = {
 	left = 2,
@@ -323,39 +366,7 @@ config.key_tables = {
 	},
 }
 
--- For example, changing the color scheme:
-config.colors = {
-	background    = "#0c0b0f", -- dark purple
-	cursor_border = "#bea3c7",
-	cursor_bg     = "#bea3c7",
-	selection_fg  = "#281733",
 
-	tab_bar       = {
-		background   = "#0c0b0f",
-		active_tab   = {
-			bg_color      = "#0c0b0f",
-			fg_color      = "#bea3c7",
-			intensity     = "Normal",
-			underline     = "None",
-			italic        = false,
-			strikethrough = false,
-		},
-		inactive_tab = {
-			bg_color      = "#0c0b0f",
-			fg_color      = "#f8f2f5",
-			intensity     = "Normal",
-			underline     = "None",
-			italic        = false,
-			strikethrough = false,
-		},
-
-		new_tab      = {
-			-- bg_color = "rgba(59, 34, 76, 50%)",
-			bg_color = "#0c0b0f",
-			fg_color = "white",
-		},
-	},
-}
 
 -- config.window_background_image = "C:/dev/misc/berk.png"
 -- config.window_background_image_hsb = {
