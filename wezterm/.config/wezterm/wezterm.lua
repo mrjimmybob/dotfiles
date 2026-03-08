@@ -164,6 +164,7 @@ config.mouse_bindings = {
 		mods = "NONE",
 	},
 }
+
 config.window_background_opacity = 0.90
 -- config.window_close_confirmation = "AlwaysPrompt"
 config.window_padding = {
