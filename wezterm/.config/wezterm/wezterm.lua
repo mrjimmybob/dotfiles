@@ -93,31 +93,31 @@ end
 -- For example, changing the color scheme:
 config.colors = {
 	-- background = "rgba(12,11,15,0.85)",
-	background    = "#0c0b0f", -- dark purple
+	background = "#0c0b0f", -- dark purple
 	cursor_border = "#bea3c7",
-	cursor_bg     = "#bea3c7",
-	selection_fg  = "#281733",
+	cursor_bg = "#bea3c7",
+	selection_fg = "#281733",
 
-	tab_bar       = {
-		background   = "#0c0b0f",
-		active_tab   = {
-			bg_color      = "#0c0b0f",
-			fg_color      = "#bea3c7",
-			intensity     = "Normal",
-			underline     = "None",
-			italic        = false,
+	tab_bar = {
+		background = "#0c0b0f",
+		active_tab = {
+			bg_color = "#0c0b0f",
+			fg_color = "#bea3c7",
+			intensity = "Normal",
+			underline = "None",
+			italic = false,
 			strikethrough = false,
 		},
 		inactive_tab = {
-			bg_color      = "#0c0b0f",
-			fg_color      = "#f8f2f5",
-			intensity     = "Normal",
-			underline     = "None",
-			italic        = false,
+			bg_color = "#0c0b0f",
+			fg_color = "#f8f2f5",
+			intensity = "Normal",
+			underline = "None",
+			italic = false,
 			strikethrough = false,
 		},
 
-		new_tab      = {
+		new_tab = {
 			-- bg_color = "rgba(59, 34, 76, 50%)",
 			bg_color = "#0c0b0f",
 			fg_color = "white",
@@ -128,10 +128,10 @@ config.colors = {
 -- Set wallpaper:
 --local wallpaper = home .. "/.config/wezterm/wallpaper/wall2.jpg"
 local wallpapers = {
-  home .. "/.config/wezterm/wallpaper/AsukaWall1.png",
-  home .. "/.config/wezterm/wallpaper/AsukaWall2.png",
-  home .. "/.config/wezterm/wallpaper/AsukaWall3.png",
-  home .. "/.config/wezterm/wallpaper/AsukaWall4.png",
+	home .. "/.config/wezterm/wallpaper/AsukaWall1.png",
+	home .. "/.config/wezterm/wallpaper/AsukaWall2.png",
+	home .. "/.config/wezterm/wallpaper/AsukaWall3.png",
+	home .. "/.config/wezterm/wallpaper/AsukaWall4.png",
 }
 
 -- stable selection tied to the wezterm process
@@ -139,11 +139,12 @@ local pid = wezterm.procinfo.pid()
 local idx = (pid % #wallpapers) + 1
 local selected_wallpaper = wallpapers[idx]
 
-if package.config:sub(1,1) == "\\" then
-  selected_wallpaper = selected_wallpaper:gsub("/", "\\")
+if package.config:sub(1, 1) == "\\" then
+	selected_wallpaper = selected_wallpaper:gsub("/", "\\")
 end
 
 config.window_background_image = selected_wallpaper
+
 -- local gpus = wezterm.gui.enumerate_gpus()
 -- config.webgpu_preferred_adapter = gpus[1]
 config.use_resize_increments = false
@@ -154,7 +155,7 @@ config.warn_about_missing_glyphs = false
 -- config.window_decorations = "NONE|RESIZE"
 -- config.window_frame = { font = wezterm.font({ family = "JetBrains Mono", weight = "ExtraBold" }), font_size = 12, }
 config.window_frame =
-{ font = wezterm.font({ family = "Iosevka Custom", weight = "Regular" }), active_titlebar_bg = "#0c0b0f" }
+	{ font = wezterm.font({ family = "Iosevka Custom", weight = "Regular" }), active_titlebar_bg = "#0c0b0f" }
 
 config.mouse_bindings = {
 	{
@@ -204,7 +205,6 @@ else
 	-- config.default_prog = { "pwsh.exe" }
 	-- config.default_prog = { "/bin/fish", "-wd", initialDirectory, "-NoLogo" }
 end
-
 
 config.leader = { key = "Space", mods = "CTRL", timeout_milliseconds = 2000 }
 -- keymaps
@@ -339,34 +339,32 @@ config.key_tables = {
 	-- 'resize_pane' here corresponds to the name="resize_pane" in
 	-- the key assignments above.
 	resize_pane = {
-		{ key = "LeftArrow",  action = wezterm.action.AdjustPaneSize({ "Left", 1 }) },
-		{ key = "h",          action = wezterm.action.AdjustPaneSize({ "Left", 1 }) },
+		{ key = "LeftArrow", action = wezterm.action.AdjustPaneSize({ "Left", 1 }) },
+		{ key = "h", action = wezterm.action.AdjustPaneSize({ "Left", 1 }) },
 		{ key = "RightArrow", action = wezterm.action.AdjustPaneSize({ "Right", 1 }) },
-		{ key = "l",          action = wezterm.action.AdjustPaneSize({ "Right", 1 }) },
-		{ key = "UpArrow",    action = wezterm.action.AdjustPaneSize({ "Up", 1 }) },
-		{ key = "k",          action = wezterm.action.AdjustPaneSize({ "Up", 1 }) },
-		{ key = "DownArrow",  action = wezterm.action.AdjustPaneSize({ "Down", 1 }) },
-		{ key = "j",          action = wezterm.action.AdjustPaneSize({ "Down", 1 }) },
+		{ key = "l", action = wezterm.action.AdjustPaneSize({ "Right", 1 }) },
+		{ key = "UpArrow", action = wezterm.action.AdjustPaneSize({ "Up", 1 }) },
+		{ key = "k", action = wezterm.action.AdjustPaneSize({ "Up", 1 }) },
+		{ key = "DownArrow", action = wezterm.action.AdjustPaneSize({ "Down", 1 }) },
+		{ key = "j", action = wezterm.action.AdjustPaneSize({ "Down", 1 }) },
 		-- Cancel the mode by pressing escape
-		{ key = "Escape",     action = "PopKeyTable" },
+		{ key = "Escape", action = "PopKeyTable" },
 	},
 
 	-- Defines the keys that are active in our activate-pane mode.
 	-- 'activate_pane' here corresponds to the name="activate_pane" in
 	-- the key assignments above.
 	activate_pane = {
-		{ key = "LeftArrow",  action = wezterm.action.ActivatePaneDirection("Left") },
-		{ key = "h",          action = wezterm.action.ActivatePaneDirection("Left") },
+		{ key = "LeftArrow", action = wezterm.action.ActivatePaneDirection("Left") },
+		{ key = "h", action = wezterm.action.ActivatePaneDirection("Left") },
 		{ key = "RightArrow", action = wezterm.action.ActivatePaneDirection("Right") },
-		{ key = "l",          action = wezterm.action.ActivatePaneDirection("Right") },
-		{ key = "UpArrow",    action = wezterm.action.ActivatePaneDirection("Up") },
-		{ key = "k",          action = wezterm.action.ActivatePaneDirection("Up") },
-		{ key = "DownArrow",  action = wezterm.action.ActivatePaneDirection("Down") },
-		{ key = "j",          action = wezterm.action.ActivatePaneDirection("Down") },
+		{ key = "l", action = wezterm.action.ActivatePaneDirection("Right") },
+		{ key = "UpArrow", action = wezterm.action.ActivatePaneDirection("Up") },
+		{ key = "k", action = wezterm.action.ActivatePaneDirection("Up") },
+		{ key = "DownArrow", action = wezterm.action.ActivatePaneDirection("Down") },
+		{ key = "j", action = wezterm.action.ActivatePaneDirection("Down") },
 	},
 }
-
-
 
 -- config.window_background_image = "C:/dev/misc/berk.png"
 -- config.window_background_image_hsb = {
@@ -406,7 +404,7 @@ wezterm.on("cycleTheme", function(window, pane)
 		if scheme.background then
 			local bg = wezterm.color.parse(scheme.background) -- parse into a color object
 			-- -@diagnostic disable-next-line: unused-local
-			local h, s, l, a = bg:hsla()             -- and extract HSLA information
+			local h, s, l, a = bg:hsla() -- and extract HSLA information
 			wezterm.log_info("s:" .. s .. ", a:" .. a .. ", h:" .. h)
 
 			if l < 0.4 then
