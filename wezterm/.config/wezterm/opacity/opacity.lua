@@ -1,10 +1,17 @@
 local M = {}
 
 M.init = function()
-  local opacity = { "Default" }
+  local opacity = {
+    { label = "Default", value = nil },
+  }
+
   for i = 0, 90, 10 do
-    table.insert(opacity, { label = string.format("%2d%%", i), value = i / 100 })
+    table.insert(opacity, {
+      label = string.format("%2d%%", i),
+      value = i / 100,
+    })
   end
+
   return opacity
 end
 
