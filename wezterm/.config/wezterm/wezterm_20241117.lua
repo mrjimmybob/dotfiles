@@ -1,42 +1,40 @@
 -- Pull in the wezterm API
 -- stylua: ignore start
-local wezterm         = require("wezterm")
-local selector        = require("config-selector")
-local appearance      = require("appearance")
-local projects        = require("projects")
+local wezterm = require("wezterm")
+local selector = require("config-selector")
+local appearance = require("appearance")
+local projects = require("projects")
 
 -- This will hold the configuration.
-local config          = wezterm.config_builder()
+local config   = wezterm.config_builder()
 
 -- My dynamic configuration selectors
-local fonts           = selector.new({ title = "Font Selector", subdir = "fonts" })
-local inactive        = selector.new({ title = "Inactive Pane Selector", subdir = "inactivepanes" })
-local leading         = selector.new({ title = "Font Leading Selector", subdir = "leadings" })
-local schemes         = selector.new({ title = "Color Scheme Selector", subdir = "colorschemes" })
-local sizes           = selector.new({ title = "Font Size Selector", subdir = "sizes" })
-local opacity         = selector.new({ title = "Opacity Selector", subdir = "opacity" })
-
--- New Opacity cycling and dimming when unfocussed
-local OPACITIES       = { 1.0, 0.90, 0.80, 0.70, 0.60, 0.50 }
-local DEFAULT_OPACITY = 0.90 -- opacity used at startup
-local FOCUSED_HSB     = { brightness = 0.8, saturation = 1.0 }
-local UNFOCUSED_HSB   = { brightness = 0.4, saturation = 0.4 }
-
--- Keep track of the current opacity from cycling
-local current_opacity = DEFAULT_OPACITY
-
--- Detect platform
-local is_windows      = wezterm.target_triple:find("windows") ~= nil
-local home            = wezterm.home_dir
+local fonts    = selector.new({ title = "Font Selector",          subdir = "fonts" })
+local inactive = selector.new({ title = "Inactive Pane Selector", subdir = "inactivepanes" })
+local leading  = selector.new({ title = "Font Leading Selector",  subdir = "leadings" })
+local schemes  = selector.new({ title = "Color Scheme Selector",  subdir = "colorschemes" })
+local sizes    = selector.new({ title = "Font Size Selector",     subdir = "sizes" })
+local opacity  = selector.new({ title = "Opacity Selector",       subdir = "opacity" })
 
 -- Default tab names
-local TAB_NAME_ICON   = { ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' }
--- Default tab icons
-local TAB_NUMBER_ICON = { '󰎤', '󰎧', '󰎪', '󰎭', '󰎱', '󰎳', '󰎶', '󰎹', '󰎼', '󰎡' }
+local TAB_NAME_ICON   = {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' }
+--cfault tab icons
+local TAB_NUMBER_ICON = {'󰎤', '󰎧', '󰎪', '󰎭', '󰎱', '󰎳', '󰎶', '󰎹', '󰎼', '󰎡' }
 -- Default zoomed tab icons
-local TAB_ZOOMED_ICON = { '󰼏', '󰼐', '󰼑', '󰼒', '󰼓', '󰼔', '󰼕', '󰼖', '󰼗', '󰼎' }
+local TAB_ZOOMED_ICON = {'󰼏', '󰼐', '󰼑', '󰼒', '󰼓', '󰼔', '󰼕', '󰼖', '󰼗', '󰼎' }
 
-local LEADER_ICON     = "   " -- .. utf8.char(0x1f30a) -- ocean wave       󰠗  󱜺  .
+local is_darwin <const> = wezterm.target_triple:find("darwin") ~= nil
+local is_linux <const> = wezterm.target_triple:find("linux") ~= nil
+local is_windows <const> = wezterm.target_triple:find("windows") ~= nil
+
+local LEADER_ICON = "   " -- .. utf8.char(0x1f30a) -- ocean wave       󰠗  󱜺  .
+if (is_darwin) then
+  LEADER_ICON = "   "
+elseif (is_windows) then
+  LEADER_ICON = "   "
+elseif (is_linux) then
+  LEADER_ICON = "   "  -- "   "
+end
 -- local TAB_NAME_ICON   = {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' }
 -- local TAB_NAME_ICON   = {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' }
 -- local TAB_NAME_ICON   = {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' }
@@ -51,7 +49,7 @@ local LEADER_ICON     = "   " -- .. utf8.char(0x1f30a) -- ocean wave   
 -- local magnify_icon = ' 󰛭 '
 -- local magnify_icon = '🔎'
 --               .
---       󰣚  󰣭                                      󰖳  .
+--       󰣚  󰣭                                    󰣠    󰖳  .
 -- local TAB_NUMBER_ICON = {'❶', '❷', '❸', '❹', '❺', '❻', '❼', '❽', '❾' }
 -- local TAB_NUMBER_ICON = {'①', '②', '③', '④', '⑤', '⑥', '⑦', '⑧', '⑨' }
 -- local TAB_NUMBER_ICON = {'⓵', '⓶', '⓷', '⓸', '⓹', '⓺', '⓻', '⓼', '⓽' }
@@ -73,9 +71,8 @@ fonts:select(config, "Hasklug")
 -- config.font = wezterm.font("Iosevka")
 -- config.font = wezterm.font("M+ 1m")
 -- config.font = wezterm.font("Hack Regular")
-config.cell_width = 1
-config.line_height = 1
-config.font_size = 22.0 -- Or use font defined size!
+config.cell_width = 0.9
+config.font_size = 16.0 -- Or use font defined size!
 
 config.font = wezterm.font_with_fallback({
 	"Consolas",
@@ -83,86 +80,22 @@ config.font = wezterm.font_with_fallback({
 
 -- schemes:select(config, "Catppuccin Mocha")
 if appearance.is_dark() then
-	-- config.color_scheme = "Brewer (dark) (terminal.sexy)"
 	config.color_scheme = "Tokyo Night"
 else
-	-- config.color_scheme = "Brewer (light) (terminal.sexy)"
 	config.color_scheme = "Tokyo Night Day"
 end
 
--- For example, changing the color scheme:
-config.colors = {
-	-- background = "rgba(12,11,15,0.85)",
-	background = "#0c0b0f", -- dark purple
-	cursor_border = "#bea3c7",
-	cursor_bg = "#bea3c7",
-	selection_fg = "#281733",
-
-	tab_bar = {
-		background = "#0c0b0f",
-		active_tab = {
-			bg_color = "#0c0b0f",
-			fg_color = "#bea3c7",
-			intensity = "Normal",
-			underline = "None",
-			italic = false,
-			strikethrough = false,
-		},
-		inactive_tab = {
-			bg_color = "#0c0b0f",
-			fg_color = "#f8f2f5",
-			intensity = "Normal",
-			underline = "None",
-			italic = false,
-			strikethrough = false,
-		},
-
-		new_tab = {
-			-- bg_color = "rgba(59, 34, 76, 50%)",
-			bg_color = "#0c0b0f",
-			fg_color = "white",
-		},
-	},
-}
-
--- Set wallpaper:
---local wallpaper = home .. "/.config/wezterm/wallpaper/wall2.jpg"
-local wallpapers = {
-	home .. "/.config/wezterm/wallpaper/AsukaWall1.png",
-	home .. "/.config/wezterm/wallpaper/AsukaWall2.png",
-	home .. "/.config/wezterm/wallpaper/AsukaWall3.png",
-	home .. "/.config/wezterm/wallpaper/AsukaWall4.png",
-}
-
--- stable selection tied to the wezterm process
-local pid = wezterm.procinfo.pid()
-local idx = (pid % #wallpapers) + 1
-local selected_wallpaper = wallpapers[idx]
-
-if package.config:sub(1, 1) == "\\" then
-	selected_wallpaper = selected_wallpaper:gsub("/", "\\")
-end
-
-config.window_background_image = selected_wallpaper
-
 -- local gpus = wezterm.gui.enumerate_gpus()
 -- config.webgpu_preferred_adapter = gpus[1]
---config.enable_wayland = false
 config.use_resize_increments = false
 config.adjust_window_size_when_changing_font_size = false
 config.warn_about_missing_glyphs = false
 
---config.window_decorations = "INTEGRATED_BUTTONS|RESIZE"
---config.window_decorations = "NONE|RESIZE"
---config.window_frame = { font = wezterm.font({ family = "JetBrains Mono", weight = "ExtraBold" }), font_size = 12 }
-config.window_frame = {
-	font = wezterm.font({
-		family = "Iosevka Custom",
-		weight = "Regular",
-	}),
-	font_size = 11,
-	active_titlebar_bg = "#1e1e2e", -- #0c0b0f
-}
+-- config.window_decorations = "INTEGRATED_BUTTONS|RESIZE"
+-- config.window_decorations = "NONE|RESIZE"
+-- config.window_frame = { font = wezterm.font({ family = "JetBrains Mono", weight = "ExtraBold" }), font_size = 12, }
+config.window_frame =
+	{ font = wezterm.font({ family = "Iosevka Custom", weight = "Regular" }), active_titlebar_bg = "#0c0b0f" }
 
 config.mouse_bindings = {
 	{
@@ -171,8 +104,7 @@ config.mouse_bindings = {
 		mods = "NONE",
 	},
 }
-
-config.window_background_opacity = 0.90
+config.window_background_opacity = 0.9
 -- config.window_close_confirmation = "AlwaysPrompt"
 config.window_padding = {
 	left = 2,
@@ -194,112 +126,111 @@ config.use_fancy_tab_bar = false
 
 config.front_end = "OpenGL"
 -- config.front_end = "WebGpu"
-config.max_fps = 60
-config.default_cursor_style = "SteadyBlock" --"BlinkingBlock"
+config.enable_wayland = false
+config.max_fps = 144
+config.default_cursor_style = "BlinkingBlock"
 config.animation_fps = 1
 config.cursor_blink_rate = 500
-config.initial_cols = 110
-config.initial_rows = 32
 config.term = "xterm-256color" -- Set the terminal type
+
+config.cell_width = 0.9
 
 local user = os.getenv("USER") or os.getenv("USERNAME") or os.getenv("LOGNAME")
 if user == "mr_ji" then
-	-- initialDirectory = "D:\\MyDocuments"
-	-- config.default_prog = { "C:\\Program Files\\PowerShell\\7\\pwsh.exe", "-wd", "D:\\MyDocuments", "-NoLogo" }
-	config.default_prog = { "C:\\Program Files\\PowerShell\\7\\pwsh.exe", "-wd", "D:\\MyDocuments", "-NoLogo" }
+	config.default_prog = { "pwsh.exe", "-wd", "D:\\MyDocuments", "-NoLogo" }
 elseif user == "USRVA36" then
 	config.default_prog = { "pwsh.exe", "-wd", "D:\\Datos\\CodigoFuente", "-NoLogo" }
-else
-	-- config.default_prog = { "pwsh.exe" }
-	-- config.default_prog = { "/bin/fish", "-wd", initialDirectory, "-NoLogo" }
 end
+
+config.initial_cols = 110
+config.initial_rows = 28
 
 config.leader = { key = "Space", mods = "CTRL", timeout_milliseconds = 2000 }
 -- keymaps
 -- stylua: ignore
 config.keys = {
 	-- Turn off the default CMD-m Hide action, allowing CMD-m to be potentially recognized and handled by the tab
-	{ key = "m",  mods = "CMD",            action = wezterm.action.DisableDefaultAssignment },
+	{ key = "m", mods = "CMD", action = wezterm.action.DisableDefaultAssignment },
 
-	{ key = '{',  mods = 'SHIFT|CTRL',     action = wezterm.action.RotatePanes 'CounterClockwise', },
-	{ key = '}',  mods = 'SHIFT|CTRL',     action = wezterm.action.RotatePanes 'Clockwise' },
-	{ key = "[",  mods = "LEADER",         action = wezterm.action.ActivatePaneDirection("Prev") },
-	{ key = "]",  mods = "LEADER",         action = wezterm.action.ActivatePaneDirection("Next") },
+	{ key = '{', mods = 'SHIFT|CTRL', action = wezterm.action.RotatePanes 'CounterClockwise', },
+	{ key = '}', mods = 'SHIFT|CTRL', action = wezterm.action.RotatePanes 'Clockwise' },
+	{ key = "[", mods = "LEADER", action = wezterm.action.ActivatePaneDirection("Prev") },
+	{ key = "]", mods = "LEADER", action = wezterm.action.ActivatePaneDirection("Next") },
 
 	-- CTRL+SHIFT+Space, followed by 'r' will put us in resize-pane mode until we cancel that mode.
-	{ key = "r",  mods = "LEADER",         action = wezterm.action.ActivateKeyTable({ name = "resize_pane", one_shot = false }) },
+	{ key = "r", mods = "LEADER", action = wezterm.action.ActivateKeyTable({ name = "resize_pane", one_shot = false }) },
 	-- CTRL+SHIFT+Space, followed by 'a' will put us in activate-pane mode until we press some other key
 	-- or until 1 second (1000ms) of time elapses
-	{ key = "a",  mods = "LEADER",         action = wezterm.action.ActivateKeyTable({ name = "activate_pane", timeout_milliseconds = 1000 }), },
+	{ key = "a", mods = "LEADER", action = wezterm.action.ActivateKeyTable({ name = "activate_pane", timeout_milliseconds = 1000 }), },
 
-	{ key = "r",  mods = "SHIFT|CTRL|ALT", action = wezterm.action.ReloadConfiguration },
-	{ key = "l",  mods = "SHIFT|CTRL|ALT", action = wezterm.action.ShowDebugOverlay },
-	{ key = "f",  mods = "LEADER",         action = wezterm.action.ToggleFullScreen },
-	{ key = "\\", mods = "LEADER",         action = wezterm.action.SplitHorizontal({ domain = "CurrentPaneDomain" }) },
-	{ key = "-",  mods = "LEADER",         action = wezterm.action.SplitVertical({ domain = "CurrentPaneDomain" }) },
-	{ key = "h",  mods = "LEADER",         action = wezterm.action.SplitPane({ direction = "Down", size = { Percent = 50 } }) },
-	{ key = "v",  mods = "LEADER",         action = wezterm.action.SplitPane({ direction = "Right", size = { Percent = 50 } }), },
-	{ key = "s",  mods = "LEADER",         action = wezterm.action.PaneSelect },
-	{ key = "z",  mods = "LEADER",         action = wezterm.action.TogglePaneZoomState },
-	{ key = "n",  mods = "LEADER",         action = wezterm.action.SpawnTab("CurrentPaneDomain") },
-	{ key = 'n',  mods = 'SHIFT|CTRL',     action = wezterm.action.SpawnWindow },
-	{ key = "1",  mods = "LEADER",         action = wezterm.action({ ActivateTab = 0 }) },
-	{ key = "2",  mods = "LEADER",         action = wezterm.action({ ActivateTab = 1 }) },
-	{ key = "3",  mods = "LEADER",         action = wezterm.action({ ActivateTab = 2 }) },
-	{ key = "4",  mods = "LEADER",         action = wezterm.action({ ActivateTab = 3 }) },
-	{ key = "5",  mods = "LEADER",         action = wezterm.action({ ActivateTab = 4 }) },
-	{ key = "6",  mods = "LEADER",         action = wezterm.action({ ActivateTab = 5 }) },
-	{ key = "7",  mods = "LEADER",         action = wezterm.action({ ActivateTab = 6 }) },
-	{ key = "8",  mods = "LEADER",         action = wezterm.action({ ActivateTab = 7 }) },
-	{ key = "9",  mods = "LEADER",         action = wezterm.action({ ActivateTab = 8 }) },
-	{ key = "w",  mods = "LEADER",         action = wezterm.action.CloseCurrentTab({ confirm = true }) },
-	{ key = "x",  mods = "LEADER",         action = wezterm.action({ CloseCurrentPane = { confirm = true } }) },
+	{ key = "r", mods = "SHIFT|CTRL|ALT", action = wezterm.action.ReloadConfiguration },
+	{ key = "l", mods = "SHIFT|CTRL|ALT", action = wezterm.action.ShowDebugOverlay },
+	{ key = "f", mods = "LEADER", action = wezterm.action.ToggleFullScreen },
+	{ key = "\\", mods = "LEADER", action = wezterm.action.SplitHorizontal({ domain = "CurrentPaneDomain" }) },
+	{ key = "/", mods = "LEADER", action = wezterm.action.SplitVertical({ domain = "CurrentPaneDomain" }) },
+	{ key = "h", mods = "LEADER", action = wezterm.action.SplitPane({ direction = "Down", size = { Percent = 50 } }) },
+	{ key = "v", mods = "LEADER", action = wezterm.action.SplitPane({ direction = "Right", size = { Percent = 50 } }), },
+	{ key = "s", mods = "LEADER", action = wezterm.action.PaneSelect },
+	{ key = "z", mods = "LEADER", action = wezterm.action.TogglePaneZoomState },
+ 	{ key = "n", mods = "LEADER", action = wezterm.action.SpawnTab("CurrentPaneDomain") },
+	{ key = 'n', mods = 'SHIFT|CTRL', action = wezterm.action.SpawnWindow },
+	{ key = "1", mods = "LEADER", action = wezterm.action({ ActivateTab = 0 }) },
+	{ key = "2", mods = "LEADER", action = wezterm.action({ ActivateTab = 1 }) },
+	{ key = "3", mods = "LEADER", action = wezterm.action({ ActivateTab = 2 }) },
+	{ key = "4", mods = "LEADER", action = wezterm.action({ ActivateTab = 3 }) },
+	{ key = "5", mods = "LEADER", action = wezterm.action({ ActivateTab = 4 }) },
+	{ key = "6", mods = "LEADER", action = wezterm.action({ ActivateTab = 5 }) },
+	{ key = "7", mods = "LEADER", action = wezterm.action({ ActivateTab = 6 }) },
+	{ key = "8", mods = "LEADER", action = wezterm.action({ ActivateTab = 7 }) },
+	{ key = "9", mods = "LEADER", action = wezterm.action({ ActivateTab = 8 }) },
+	{ key = "w", mods = "LEADER", action = wezterm.action.CloseCurrentTab({ confirm = true }) },
+	{ key = "x", mods = "LEADER", action = wezterm.action({ CloseCurrentPane = { confirm = true } }) },
 	-- paste from the clipboard
-	{ key = "V",  mods = "CTRL",           action = wezterm.action.PasteFrom("Clipboard") },
+	{ key = "V", mods = "CTRL", action = wezterm.action.PasteFrom("Clipboard") },
 	-- paste from the primary selection
-	-- { key = 'V', mods = 'CTRL', action = wezterm.action.PasteFrom 'PrimarySelection' },
+  -- { key = 'V', mods = 'CTRL', action = wezterm.action.PasteFrom 'PrimarySelection' },
 
 	-- These work by default:
-	{ key = '=',  mods = 'SHIFT|CTRL',     action = 'IncreaseFontSize' },
-	{ key = '-',  mods = 'SHIFT|CTRL',     action = 'DecreaseFontSize' },
-	-- { key = "=", mods = "SHIFT|CTRL", action = wezterm.action.EmitEvent "kaz-inc-font-size" },
-	-- { key = "-", mods = "SHIFT|CTRL", action = wezterm.action.EmitEvent "kaz-dec-font-size" },
-	-- { key = 'd', mods = 'SHIFT|CTRL', action = wezterm.action.ResetFontSize },
-	{ key = 'd',  mods = 'SHIFT|CTRL',     action = wezterm.action.ResetFontAndWindowSize, },
+  { key = '=', mods = 'SHIFT|CTRL', action = 'IncreaseFontSize' },
+  { key = '-', mods = 'SHIFT|CTRL', action = 'DecreaseFontSize' },
+  -- { key = "=", mods = "SHIFT|CTRL", action = wezterm.action.EmitEvent "kaz-inc-font-size" },
+  -- { key = "-", mods = "SHIFT|CTRL", action = wezterm.action.EmitEvent "kaz-dec-font-size" },
+  -- { key = 'd', mods = 'SHIFT|CTRL', action = wezterm.action.ResetFontSize },
+  { key = 'd', mods = 'SHIFT|CTRL', action = wezterm.action.ResetFontAndWindowSize, },
 
 	-- Theme Cycler
-	--{ key = "t", mods = "SHIFT|CTRL", action = wezterm.action_callback(themeCycler) },
-	{ key = "t",  mods = "LEADER",         action = wezterm.action.EmitEvent "cycleTheme" },
+ 	--{ key = "t", mods = "SHIFT|CTRL", action = wezterm.action_callback(themeCycler) },
+	{ key = "t", mods = "LEADER", action = wezterm.action.EmitEvent "cycleTheme" },
 
 	-- Or choose theme from selector
-	{ key = "t",  mods = "SHIFT|CTRL",     action = schemes:selector_action() },
+	{ key = "t", mods = "SHIFT|CTRL", action = schemes:selector_action() },
 
 	-- Toggle opacity
-	{ key = "o",  mods = "SHIFT|CTRL",     action = wezterm.action.EmitEvent "cycleOpacity" },
-	{ key = ">",  mods = "SHIFT|CTRL",     action = wezterm.action.EmitEvent "increaseOpacity" },
-	{ key = "<",  mods = "SHIFT|CTRL",     action = wezterm.action.EmitEvent "decreaseOpacity" },
+	{ key = "o", mods = "SHIFT|CTRL", action = wezterm.action.EmitEvent "cycleOpacity" },
+	{ key = ">", mods = "SHIFT|CTRL", action = wezterm.action.EmitEvent "increaseOpacity" },
+	{ key = "<", mods = "SHIFT|CTRL", action = wezterm.action.EmitEvent "decreaseOpacity" },
 	-- { key = "o", mods = "SHIFT|CTRL", action = wezterm.action_callback(toggleOpacity) },
 	-- Or choose opacity from selector
-	{ key = "o",  mods = "LEADER",         action = opacity:selector_action() },
+	{ key = "o", mods = "LEADER", action = opacity:selector_action() },
 
 	-- Toggle fonts
-	{ key = "f",  mods = "SHIFT|CTRL",     action = fonts:selector_action() },
-	{ key = "i",  mods = "SHIFT|CTRL",     action = inactive:selector_action() },
-	{ key = "l",  mods = "SHIFT|CTRL",     action = leading:selector_action() },
-	{ key = "s",  mods = "SHIFT|CTRL",     action = sizes:selector_action() },
-	{ key = 'w',  mods = 'SHIFT|CTRL',     action = wezterm.action.ShowLauncherArgs { flags = 'FUZZY|WORKSPACES' }, },
+	{ key = "f", mods = "SHIFT|CTRL", action = fonts:selector_action() },
+	{ key = "i", mods = "SHIFT|CTRL", action = inactive:selector_action() },
+	{ key = "l", mods = "SHIFT|CTRL", action = leading:selector_action() },
+	{ key = "s", mods = "SHIFT|CTRL", action = sizes:selector_action() },
+	{ key = 'w', mods = 'SHIFT|CTRL', action = wezterm.action.ShowLauncherArgs { flags = 'FUZZY|WORKSPACES' },	},
 
 	-- Prompt for tab name
 	{
 		key = 'e',
 		mods = 'LEADER',
 		action = wezterm.action.PromptInputLine {
-			description = 'Enter new name for tab',
-			-- initial_value = 'My Tab Name',
-			action = wezterm.action_callback(function(window, pane, line)
+		  	description = 'Enter new name for tab',
+		  	-- initial_value = 'My Tab Name',
+		  	action = wezterm.action_callback(function(window, pane, line)
 				if not line then return end
-				local t_index = window:active_tab():tab_id() + 1
-				wezterm.log_info("Change tab (" .. t_index .. ") name to: " .. line)
+				local t_index = window:active_tab():tab_id()+1
+				wezterm.log_info("Change tab (" .. t_index .. ") name to: ".. line)
 				if #line > 0 then
 					TAB_NAME_ICON[t_index] = line
 				else
@@ -307,7 +238,7 @@ config.keys = {
 				end
 				-- window:active_tab():set_title(TAB_NAME_ICON[window:active_tab():tab_id()-1])
 				-- window:get_title(), window:set_title("something"), tab:get_title(), tab:set_title("something")
-			end),
+		  	end),
 		},
 	},
 
@@ -322,20 +253,20 @@ config.keys = {
 				{ Text = 'Enter name for new workspace' },
 			},
 			action = wezterm.action_callback(function(window, pane, line)
-				-- line will be `nil` if they hit escape without entering anything
-				-- An empty string if they just hit enter or the actual line of text they wrote
-				if line then
-					window:perform_action(wezterm.action.SwitchToWorkspace { name = line, }, pane)
-				end
-			end),
+			-- line will be `nil` if they hit escape without entering anything
+			-- An empty string if they just hit enter or the actual line of text they wrote
+			if line then
+				window:perform_action(wezterm.action.SwitchToWorkspace { name = line, }, pane)
+			end
+		end),
 		},
 	},
 
-	-- Present in to our project picker
-	{ key = 'p', mods = 'LEADER', action = projects.choose_project(), },
+  -- Present in to our project picker
+  { key = 'p', mods = 'LEADER', action = projects.choose_project(), },
 
-	-- Present a list of existing workspaces
-	{ key = 'l', mods = 'LEADER', action = wezterm.action.ShowLauncherArgs { flags = 'FUZZY|WORKSPACES' }, },
+  -- Present a list of existing workspaces
+  { key = 'l', mods = 'LEADER', action = wezterm.action.ShowLauncherArgs { flags = 'FUZZY|WORKSPACES' }, },
 
 }
 
@@ -371,6 +302,41 @@ config.key_tables = {
 		{ key = "k", action = wezterm.action.ActivatePaneDirection("Up") },
 		{ key = "DownArrow", action = wezterm.action.ActivatePaneDirection("Down") },
 		{ key = "j", action = wezterm.action.ActivatePaneDirection("Down") },
+	},
+}
+
+-- For example, changing the color scheme:
+config.color_scheme = "Cloud (terminal.sexy)"
+config.colors = {
+	background = "#0c0b0f", -- dark purple
+	cursor_border = "#bea3c7",
+	cursor_bg = "#bea3c7",
+	selection_fg = "#281733",
+
+	tab_bar = {
+		background = "#0c0b0f",
+		active_tab = {
+			bg_color = "#0c0b0f",
+			fg_color = "#bea3c7",
+			intensity = "Normal",
+			underline = "None",
+			italic = false,
+			strikethrough = false,
+		},
+		inactive_tab = {
+			bg_color = "#0c0b0f",
+			fg_color = "#f8f2f5",
+			intensity = "Normal",
+			underline = "None",
+			italic = false,
+			strikethrough = false,
+		},
+
+		new_tab = {
+			-- bg_color = "rgba(59, 34, 76, 50%)",
+			bg_color = "#0c0b0f",
+			fg_color = "white",
+		},
 	},
 }
 
@@ -429,9 +395,7 @@ wezterm.on("cycleTheme", function(window, pane)
 		if schemesToSearch[i] == currentScheme then
 			wezterm.log_info('Going to switch to theme: "' .. schemesToSearch[i + 1] .. '"')
 			local overrides = window:get_config_overrides() or {}
-			-- overrides.color_scheme = schemesToSearch[i + 1]
-			local next = schemesToSearch[i + 1] or schemesToSearch[1]
-			overrides.color_scheme = next
+			overrides.color_scheme = schemesToSearch[i + 1]
 			window:set_config_overrides(overrides)
 			return
 		end
