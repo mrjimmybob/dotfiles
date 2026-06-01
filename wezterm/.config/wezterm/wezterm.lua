@@ -77,9 +77,9 @@ config.cell_width = 1
 config.line_height = 1
 config.font_size = 22.0 -- Or use font defined size!
 
--- config.font = wezterm.font_with_fallback({
---  	"Consolas",
---})
+config.font = wezterm.font_with_fallback({
+	"Consolas",
+})
 
 -- schemes:select(config, "Catppuccin Mocha")
 if appearance.is_dark() then
@@ -220,41 +220,29 @@ config.leader = { key = "Space", mods = "CTRL", timeout_milliseconds = 2000 }
 config.keys = {
 	-- Turn off the default CMD-m Hide action, allowing CMD-m to be potentially recognized and handled by the tab
 	{ key = "m",  mods = "CMD",            action = wezterm.action.DisableDefaultAssignment },
-	{ key = 'P',  mods = 'SHIFT|CTRL',     action = wezterm.action.RotatePanes 'CounterClockwise', },
-	{ key = 'N',  mods = 'SHIFT|CTRL',     action = wezterm.action.RotatePanes 'Clockwise' },
-  { key = "p",  mods = "LEADER",         action = wezterm.action.ActivatePaneDirection("Prev") },
-  { key = "n",  mods = "LEADER",         action = wezterm.action.ActivatePaneDirection("Next") },
-  { key = "h",  mods = "LEADER",         action = wezterm.action.ActivatePaneDirection("Left") },
-  { key = "j",  mods = "LEADER",         action = wezterm.action.ActivatePaneDirection("Down") },
-  { key = "k",  mods = "LEADER",         action = wezterm.action.ActivatePaneDirection("Up") },
-  { key = "l",  mods = "LEADER",         action = wezterm.action.ActivatePaneDirection("Right") },
-  { key = "h",  mods = "LEADER|CTRL",    action = wezterm.action.AdjustPaneSize({ "Left", 5 }) },
-  { key = "j",  mods = "LEADER|CTRL",    action = wezterm.action.AdjustPaneSize({ "Down", 5 }) },
-  { key = "k",  mods = "LEADER|CTRL",    action = wezterm.action.AdjustPaneSize({ "Up", 5 }) },
-  { key = "l",  mods = "LEADER|CTRL",    action = wezterm.action.AdjustPaneSize({ "Right", 5 }) },
+
+	{ key = '{',  mods = 'SHIFT|CTRL',     action = wezterm.action.RotatePanes 'CounterClockwise', },
+	{ key = '}',  mods = 'SHIFT|CTRL',     action = wezterm.action.RotatePanes 'Clockwise' },
+	{ key = "[",  mods = "LEADER",         action = wezterm.action.ActivatePaneDirection("Prev") },
+	{ key = "]",  mods = "LEADER",         action = wezterm.action.ActivatePaneDirection("Next") },
+
 	-- CTRL+SHIFT+Space, followed by 'r' will put us in resize-pane mode until we cancel that mode.
-	---- { key = "r",  mods = "LEADER",         action = wezterm.action.ActivateKeyTable({ name = "resize_pane", one_shot = false }) },
+	{ key = "r",  mods = "LEADER",         action = wezterm.action.ActivateKeyTable({ name = "resize_pane", one_shot = false }) },
 	-- CTRL+SHIFT+Space, followed by 'a' will put us in activate-pane mode until we press some other key
 	-- or until 1 second (1000ms) of time elapses
-	---- { key = "a",  mods = "LEADER",         action = wezterm.action.ActivateKeyTable({ name = "activate_pane", timeout_milliseconds = 1000 }), },
+	{ key = "a",  mods = "LEADER",         action = wezterm.action.ActivateKeyTable({ name = "activate_pane", timeout_milliseconds = 1000 }), },
 
 	{ key = "r",  mods = "SHIFT|CTRL|ALT", action = wezterm.action.ReloadConfiguration },
 	{ key = "l",  mods = "SHIFT|CTRL|ALT", action = wezterm.action.ShowDebugOverlay },
 	{ key = "f",  mods = "LEADER",         action = wezterm.action.ToggleFullScreen },
 	{ key = "\\", mods = "LEADER",         action = wezterm.action.SplitHorizontal({ domain = "CurrentPaneDomain" }) },
 	{ key = "-",  mods = "LEADER",         action = wezterm.action.SplitVertical({ domain = "CurrentPaneDomain" }) },
---	{ key = "h",  mods = "LEADER",         action = wezterm.action.SplitPane({ direction = "Down", size = { Percent = 50 } }) },
---	{ key = "v",  mods = "LEADER",         action = wezterm.action.SplitPane({ direction = "Right", size = { Percent = 50 } }), },
-  { key = "[",  mods = "LEADER",         action = wezterm.action.ActivateTabRelative(-1) },
-
-  { key = "]",  mods = "LEADER",         action = wezterm.action.ActivateTabRelative(1) },
-  { key = "{",  mods = "LEADER|SHIFT",   action = wezterm.action.MoveTabRelative(-1) },
-
-  { key = "}",  mods = "LEADER|SHIFT",   action = wezterm.action.MoveTabRelative(1) },
+	{ key = "h",  mods = "LEADER",         action = wezterm.action.SplitPane({ direction = "Down", size = { Percent = 50 } }) },
+	{ key = "v",  mods = "LEADER",         action = wezterm.action.SplitPane({ direction = "Right", size = { Percent = 50 } }), },
 	{ key = "s",  mods = "LEADER",         action = wezterm.action.PaneSelect },
 	{ key = "z",  mods = "LEADER",         action = wezterm.action.TogglePaneZoomState },
-	{ key = "t",  mods = "LEADER",         action = wezterm.action.SpawnTab("CurrentPaneDomain") },
---	{ key = 'n',  mods = 'LEADER',     action = wezterm.action.SpawnWindow },
+	{ key = "n",  mods = "LEADER",         action = wezterm.action.SpawnTab("CurrentPaneDomain") },
+	{ key = 'n',  mods = 'SHIFT|CTRL',     action = wezterm.action.SpawnWindow },
 	{ key = "1",  mods = "LEADER",         action = wezterm.action({ ActivateTab = 0 }) },
 	{ key = "2",  mods = "LEADER",         action = wezterm.action({ ActivateTab = 1 }) },
 	{ key = "3",  mods = "LEADER",         action = wezterm.action({ ActivateTab = 2 }) },
@@ -280,8 +268,8 @@ config.keys = {
 	{ key = 'd',  mods = 'SHIFT|CTRL',     action = wezterm.action.ResetFontAndWindowSize, },
 
 	-- Theme Cycler
-	{ key = "t",  mods = "SHIFT|CTRL",     action = wezterm.action_callback(themeCycler) },
-  --{ key = "t",  mods = "LEADER",         action = wezterm.action.EmitEvent "cycleTheme" },
+	--{ key = "t", mods = "SHIFT|CTRL", action = wezterm.action_callback(themeCycler) },
+	{ key = "t",  mods = "LEADER",         action = wezterm.action.EmitEvent "cycleTheme" },
 
 	-- Or choose theme from selector
 	{ key = "t",  mods = "SHIFT|CTRL",     action = schemes:selector_action() },
@@ -374,16 +362,16 @@ config.key_tables = {
 	-- Defines the keys that are active in our activate-pane mode.
 	-- 'activate_pane' here corresponds to the name="activate_pane" in
 	-- the key assignments above.
-	--activate_pane = {
-	--	{ key = "LeftArrow", action = wezterm.action.ActivatePaneDirection("Left") },
-	--	{ key = "h", action = wezterm.action.ActivatePaneDirection("Left") },
-	--	{ key = "RightArrow", action = wezterm.action.ActivatePaneDirection("Right") },
-	--	{ key = "l", action = wezterm.action.ActivatePaneDirection("Right") },
-	--	{ key = "UpArrow", action = wezterm.action.ActivatePaneDirection("Up") },
-	--	{ key = "k", action = wezterm.action.ActivatePaneDirection("Up") },
-	--	{ key = "DownArrow", action = wezterm.action.ActivatePaneDirection("Down") },
-	--	{ key = "j", action = wezterm.action.ActivatePaneDirection("Down") },
-	--},
+	activate_pane = {
+		{ key = "LeftArrow", action = wezterm.action.ActivatePaneDirection("Left") },
+		{ key = "h", action = wezterm.action.ActivatePaneDirection("Left") },
+		{ key = "RightArrow", action = wezterm.action.ActivatePaneDirection("Right") },
+		{ key = "l", action = wezterm.action.ActivatePaneDirection("Right") },
+		{ key = "UpArrow", action = wezterm.action.ActivatePaneDirection("Up") },
+		{ key = "k", action = wezterm.action.ActivatePaneDirection("Up") },
+		{ key = "DownArrow", action = wezterm.action.ActivatePaneDirection("Down") },
+		{ key = "j", action = wezterm.action.ActivatePaneDirection("Down") },
+	},
 }
 
 -- config.window_background_image = "C:/dev/misc/berk.png"
