@@ -1,0 +1,8 @@
+# This file contains fish universal variable definitions.
+# VERSION: 3.0
+SETUVAR --export CARAPACE_BRIDGES:zsh\x2cfish\x2cbash\x2cinshellisense
+SETUVAR __fish_initialized:4300
+SETUVAR _hydro_git_85847:main\u2022\x20\u21911\x20
+SETUVAR _hydro_git_88631:\x1d
+SETUVAR _hydro_git_90667:\x1d
+SETUVAR fish_user_paths:/home/dallas/\x2enpm\x2dglobal/bin
