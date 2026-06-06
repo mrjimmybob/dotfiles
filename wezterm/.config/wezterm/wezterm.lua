@@ -75,7 +75,7 @@ fonts:select(config, "Hasklug")
 -- config.font = wezterm.font("Hack Regular")
 config.cell_width = 1
 config.line_height = 1
-config.font_size = 22.0 -- Or use font defined size!
+config.font_size = 16.0 -- Or use font defined size!
 
 config.font = wezterm.font_with_fallback({
 	"Consolas",

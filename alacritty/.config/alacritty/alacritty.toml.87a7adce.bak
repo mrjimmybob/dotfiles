@@ -1,0 +1,18 @@
+[window]
+dimensions = { columns = 120, lines = 36 }
+padding = { x = 3, y = 0 }
+opacity = 0.98
+blur = true
+
+[scrolling]
+history = 10000
+multiplier = 5
+
+[font]
+size = 18
+
+[selection]
+save_to_clipboard = true
+
+[cursor]
+style = { shape = "Block", blinking = "On" }

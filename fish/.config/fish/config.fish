@@ -1,15 +1,3 @@
-function emacs
-    command doom emacs $argv &
-    disown
-end
-
-function comfyui
-    cd /home/dallas/ai/comfyui
-    source ~/venvs/comfyui/bin/activate.fish
-    python main.py &
-    disown
-end
-
 fish_add_path ~/.npm-global/bin
 
 if status is-interactive

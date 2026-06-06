@@ -1,0 +1,24 @@
+#include other.conf
+# Include *.conf files from all subdirs of kitty.d inside the kitty config dir
+#globinclude kitty.d/**/*.conf
+# Include the *contents* of all env vars starting with KITTY_CONF_
+#envinclude KITTY_CONF_*
+
+font_family      Operator Mono Book
+bold_font        Operator Mono Medium
+italic_font      Operator Mono Book Italic
+bold_italic_font Operator Mono Medium Italic
+
+font_size 26.0
+
+disable_ligatures never
+
+cursor #cccccc
+cursor_text_color #111111
+cursor_shape block
+cursor_blink_interval -1
+
+scrollback_lines 2000
+scrollback_pager most --chop-long-lines --RAW-CONTROL-CHARS +INPUT_LINE_NUMBE
+
+
