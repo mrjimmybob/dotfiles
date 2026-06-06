@@ -6,8 +6,9 @@ timestr=%R
 datestr=%a, %e of %B
 
 # screenshots
-image=~/.config/swaylock/lock.jpg
 fade-in=0.2
+# image=~/.config/swaylock/lock.png
+image=~/.config/swaylock/lock.image
 
 #effect-blur=10x2
 #effect-greyscale

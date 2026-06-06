@@ -25,7 +25,7 @@
         "showIconBackground": false,
         "sortByMostUsed": true,
         "terminalCommand": "alacritty -e",
-        "viewMode": "list"
+        "viewMode": "grid"
     },
     "audio": {
         "mprisBlacklist": [
@@ -215,13 +215,13 @@
                 },
                 {
                     "colorizeDistroLogo": false,
-                    "colorizeSystemIcon": "none",
+                    "colorizeSystemIcon": "error",
                     "colorizeSystemText": "none",
                     "customIconPath": "",
                     "enableColorization": false,
                     "icon": "noctalia",
                     "id": "ControlCenter",
-                    "useDistroLogo": false
+                    "useDistroLogo": true
                 },
                 {
                     "defaultSettings": {
@@ -255,6 +255,46 @@
                         "mode": "region"
                     },
                     "id": "plugin:screenshot"
+                },
+                {
+                    "defaultSettings": {
+                        "attachmentStyle": "connected",
+                        "claude": {
+                            "additionalDirs": [
+                            ],
+                            "allowedTools": [
+                            ],
+                            "appendSystemPrompt": "",
+                            "autoResume": true,
+                            "binary": "claude",
+                            "dangerouslySkipPermissions": false,
+                            "disallowedTools": [
+                            ],
+                            "fallbackModel": "",
+                            "includePartialMessages": true,
+                            "injectNoctaliaContext": true,
+                            "maxTurns": 0,
+                            "mcpConfigPath": "",
+                            "model": "",
+                            "permissionMode": "default",
+                            "requireConfirmBypass": true,
+                            "sessionId": "",
+                            "strictMcpConfig": false,
+                            "workingDir": ""
+                        },
+                        "maxHistoryLength": 200,
+                        "panelDetached": true,
+                        "panelHeightRatio": 0.9,
+                        "panelPosition": "right",
+                        "panelWidth": 620,
+                        "scale": 1
+                    },
+                    "id": "plugin:claude-code-panel",
+                    "panel": {
+                        "defaultHeightRatio": 0.9,
+                        "defaultPosition": "right",
+                        "detached": true
+                    }
                 }
             ]
         }
@@ -354,27 +394,44 @@
         }
     },
     "desktopWidgets": {
-        "enabled": true,
+        "enabled": false,
         "gridSnap": false,
         "gridSnapScale": false,
         "monitorWidgets": [
+            {
+                "name": "DP-2",
+                "widgets": [
+                    {
+                        "clockColor": "none",
+                        "clockStyle": "digital",
+                        "customFont": "",
+                        "format": "HH:mm\\nd MMMM yyyy",
+                        "id": "Clock",
+                        "roundedCorners": true,
+                        "showBackground": true,
+                        "useCustomFont": false,
+                        "x": 50,
+                        "y": 50
+                    }
+                ]
+            }
         ],
         "overviewEnabled": true
     },
     "dock": {
         "animationSpeed": 1,
         "backgroundOpacity": 1,
-        "colorizeIcons": false,
+        "colorizeIcons": true,
         "deadOpacity": 0.6,
         "displayMode": "auto_hide",
-        "dockType": "floating",
-        "enabled": true,
+        "dockType": "attached",
+        "enabled": false,
         "floatingRatio": 1,
         "groupApps": false,
         "groupClickAction": "cycle",
         "groupContextMenuMode": "extended",
         "groupIndicatorStyle": "dots",
-        "inactiveIndicators": false,
+        "inactiveIndicators": true,
         "indicatorColor": "primary",
         "indicatorOpacity": 0.6,
         "indicatorThickness": 3,
@@ -387,10 +444,10 @@
         "onlySameOutput": true,
         "pinnedApps": [
         ],
-        "pinnedStatic": false,
+        "pinnedStatic": true,
         "position": "bottom",
         "showDockIndicator": false,
-        "showLauncherIcon": false,
+        "showLauncherIcon": true,
         "sitOnFrame": false,
         "size": 1
     },

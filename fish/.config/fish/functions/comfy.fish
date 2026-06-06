@@ -20,6 +20,7 @@ function comfy
             echo "Stopped"
 
         case restart
+	    echo "Restarting ComfyUI Web interface on http://127.0.0.1:8188"
             comfy stop
             sleep 1
             comfy start
@@ -50,6 +51,7 @@ function comfy
             popd >/dev/null
 
             echo "Started (PID: $pid)"
+	    echo "Open ComfyUI Web interface at http://127.0.0.1:8188"
 
         case '*'
             echo "Usage: comfy [start|stop|restart|open]"
