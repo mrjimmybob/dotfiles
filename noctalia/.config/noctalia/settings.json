@@ -25,7 +25,7 @@
         "showIconBackground": false,
         "sortByMostUsed": true,
         "terminalCommand": "alacritty -e",
-        "viewMode": "grid"
+        "viewMode": "list"
     },
     "audio": {
         "mprisBlacklist": [
@@ -328,7 +328,7 @@
         "manualSunrise": "06:30",
         "manualSunset": "18:30",
         "monitorForColors": "",
-        "predefinedScheme": "Gruvbox",
+        "predefinedScheme": "GruvboxAlt",
         "schedulingMode": "off",
         "syncGsettings": true,
         "useWallpaperColors": false
@@ -457,10 +457,10 @@
         "animationDisabled": false,
         "animationSpeed": 1,
         "autoStartAuth": false,
-        "avatarImage": "/home/dallas/SharedData/Pictures/vlcsnap-2026-02-11-21h44m42s125.png",
+        "avatarImage": "/home/dallas/SharedData/Pictures/vlcsnap-2026-02-16-22h57m32s877.png",
         "boxRadiusRatio": 1,
         "clockFormat": "hh\\nmm",
-        "clockStyle": "custom",
+        "clockStyle": "digital",
         "compactLockScreen": false,
         "dimmerOpacity": 0.2,
         "enableBlurBehind": true,
@@ -494,13 +494,13 @@
             ]
         },
         "language": "",
-        "lockOnSuspend": true,
+        "lockOnSuspend": false,
         "lockScreenAnimations": true,
-        "lockScreenBlur": 0,
+        "lockScreenBlur": 0.2,
         "lockScreenCountdownDuration": 10000,
         "lockScreenMonitors": [
         ],
-        "lockScreenTint": 0,
+        "lockScreenTint": 0.2,
         "passwordChars": true,
         "radiusRatio": 1,
         "reverseScroll": false,
@@ -512,7 +512,7 @@
         "showChangelogOnStartup": true,
         "showHibernateOnLockScreen": false,
         "showScreenCorners": false,
-        "showSessionButtonsOnLockScreen": true,
+        "showSessionButtonsOnLockScreen": false,
         "smoothScrollEnabled": true,
         "telemetryEnabled": false
     },
@@ -530,7 +530,7 @@
     },
     "idle": {
         "customCommands": "[]",
-        "enabled": true,
+        "enabled": false,
         "fadeDuration": 5,
         "lockCommand": "",
         "lockTimeout": 660,

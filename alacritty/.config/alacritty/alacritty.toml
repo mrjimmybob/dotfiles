@@ -9,7 +9,13 @@ history = 10000
 multiplier = 5
 
 [font]
-size = 16
+size = 18
+
+# [font.normal]
+# family = "Iosevka Nerd Font Mono"
+
+[font.normal]
+family = "CaskaydiaMono Nerd Font Mono"
 
 [selection]
 save_to_clipboard = true
