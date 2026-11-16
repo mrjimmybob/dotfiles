@@ -77,9 +77,9 @@ config.cell_width = 1
 config.line_height = 1
 config.font_size = 16.0 -- Or use font defined size!
 
-config.font = wezterm.font_with_fallback({
-	"Consolas",
-})
+-- config.font = wezterm.font_with_fallback({
+--	"Consolas",
+--})
 
 -- schemes:select(config, "Catppuccin Mocha")
 if appearance.is_dark() then
@@ -147,12 +147,12 @@ config.window_background_image = selected_wallpaper
 
 -- local gpus = wezterm.gui.enumerate_gpus()
 -- config.webgpu_preferred_adapter = gpus[1]
---config.enable_wayland = false
+config.enable_wayland = true
 config.use_resize_increments = false
 config.adjust_window_size_when_changing_font_size = false
 config.warn_about_missing_glyphs = false
 
---config.window_decorations = "INTEGRATED_BUTTONS|RESIZE"
+config.window_decorations = "INTEGRATED_BUTTONS|RESIZE"
 --config.window_decorations = "NONE|RESIZE"
 --config.window_frame = { font = wezterm.font({ family = "JetBrains Mono", weight = "ExtraBold" }), font_size = 12 }
 config.window_frame = {
